@@ -4,6 +4,9 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TransportModule } from './core/modules/transport/transport.module';
+import { DatabaseModule } from './database.module';
+import { NotificationModule } from './core/modules/notification/notification.module';
+import { UserModule } from './core/modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +17,9 @@ import { TransportModule } from './core/modules/transport/transport.module';
         port: 6379,
       },
     }),
+    DatabaseModule,
+    UserModule,
+    NotificationModule,
     TransportModule,
   ],
   controllers: [AppController],

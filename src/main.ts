@@ -18,4 +18,10 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+bootstrap()
+  .then(() => {
+    console.log(`Application is running on: ${process.env.PORT ?? 3000}`);
+  })
+  .catch((err) => {
+    console.error('Error starting application:', err);
+  });

@@ -17,7 +17,13 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "ts-node ./node_modules/typeorm/cli",
+    "typeorm-notifyly:run-migrations": "npm run typeorm migration:run -- -d ./dist/typeorm-notifyly.config.js",
+    "typeorm-notifyly:generate-migration": "npm run typeorm -- -d ./dist/typeorm-notifyly.config.js migration:generate $npm_config_name",
+    "typeorm-notifyly:create-migration": "npm run typeorm -- migration:create $npm_config_name",
+    "typeorm-notifyly:revert-migration": "npm run typeorm -- -d ./dist/typeorm-notifyly.config.js migration:revert",
+    "typeorm-notifyly:show-migration": "npm run typeorm migration:show -- -d ./dist/typeorm-notifyly.config.js"
   },
   "dependencies": {
     "@nestjs/bullmq": "^11.0.3",
@@ -26,12 +32,17 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.0",
+    "@nestjs/typeorm": "^11.0.0",
     "bullmq": "^5.56.8",
+    "dotenv": "^17.2.1",
+    "mysql2": "^3.14.2",
     "nodemailer": "^7.0.5",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "swagger-ui-express": "^5.0.1",
-    "twilio": "^5.8.0"
+    "twilio": "^5.8.0",
+    "typeorm": "^0.3.25",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -46,6 +57,7 @@
     "@types/node": "^22.10.7",
     "@types/nodemailer": "^6.4.17",
     "@types/supertest": "^6.0.2",
+    "@types/uuid": "^10.0.0",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.3",
