@@ -3,8 +3,13 @@ import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { User } from '../../entities/user.entity';
 import { NotificationPreference } from 'src/core/modules/notification/entities/notification-preference.entity';
 import { NotificationChannel } from 'src/core/modules/notification/enums';
+import { Logger } from '@nestjs/common';
 
 export default class UserWithNotificationPreferenceSeeder implements Seeder {
+  private readonly _logger = new Logger(
+    UserWithNotificationPreferenceSeeder.name,
+  );
+
   public async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,
@@ -14,6 +19,7 @@ export default class UserWithNotificationPreferenceSeeder implements Seeder {
     );
     const repository = dataSource.getRepository(User);
     const userCount = await repository.count();
+    this._logger.log(`userCount: ${userCount}`);
     if (userCount > 0) {
       return;
     }

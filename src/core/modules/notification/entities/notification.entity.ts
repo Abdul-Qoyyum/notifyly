@@ -47,6 +47,9 @@ export class Notification {
   @Column('timestamp', { name: 'delivered_at', nullable: true })
   delivered_at: Date | null;
 
+  @Column('simple-json', { nullable: true })
+  metadata: Record<string, any> | null;
+
   @BeforeInsert()
   generateId() {
     if (!this.id) {

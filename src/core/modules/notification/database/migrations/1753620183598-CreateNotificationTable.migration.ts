@@ -67,6 +67,11 @@ export class CreateNotificationTable1753620183598
             type: 'timestamp',
             isNullable: true,
           },
+          {
+            name: 'metadata',
+            type: 'json',
+            isNullable: true,
+          },
         ],
       }),
       true,

@@ -1,5 +1,4 @@
 import { Entity, PrimaryColumn, Column } from 'typeorm';
-import { NotificationChannel } from '../enums';
 
 @Entity('notification_templates')
 export class NotificationTemplate {
@@ -16,8 +15,8 @@ export class NotificationTemplate {
     name: 'is_user_visible',
     default: true,
   })
-  isUserVisible: boolean;
+  is_user_visible: boolean;
 
   @Column('simple-json')
-  allowed_channels: NotificationChannel[];
+  allowed_channels: string;
 }
