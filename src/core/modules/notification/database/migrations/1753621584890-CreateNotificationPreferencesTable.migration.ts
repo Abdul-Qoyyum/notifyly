@@ -21,12 +21,6 @@ export class CreateNotificationPreferencesTable1753621584890
             isPrimary: true,
           },
           {
-            name: 'notification_type',
-            type: 'varchar',
-            length: '36',
-            isPrimary: true,
-          },
-          {
             name: 'channel',
             type: 'varchar',
             isNullable: false,
@@ -43,14 +37,6 @@ export class CreateNotificationPreferencesTable1753621584890
         referencedColumnNames: ['id'],
         referencedTableName: 'users',
         onDelete: 'CASCADE',
-      }),
-    );
-
-    await queryRunner.createIndex(
-      'notification_preferences',
-      new TableIndex({
-        name: 'IDX_NOTIFICATION_PREFERENCES_TYPE',
-        columnNames: ['notification_type'],
       }),
     );
   }

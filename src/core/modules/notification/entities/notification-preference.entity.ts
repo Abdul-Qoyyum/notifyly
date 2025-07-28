@@ -7,9 +7,6 @@ export class NotificationPreference {
   @PrimaryColumn('varchar', { name: 'user_id', length: 36 })
   user_id: string;
 
-  @PrimaryColumn('varchar', { name: 'notification_type', length: 36 })
-  notification_type: string;
-
   @Column({
     type: 'enum',
     enum: NotificationChannel,

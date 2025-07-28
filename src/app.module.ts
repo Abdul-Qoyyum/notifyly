@@ -7,6 +7,7 @@ import { TransportModule } from './core/modules/transport/transport.module';
 import { DatabaseModule } from './database.module';
 import { NotificationModule } from './core/modules/notification/notification.module';
 import { UserModule } from './core/modules/auth/auth.module';
+import { CommandModule } from './core/commands/command.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { UserModule } from './core/modules/auth/auth.module';
     UserModule,
     NotificationModule,
     TransportModule,
+    CommandModule,
   ],
   controllers: [AppController],
   providers: [AppService],
