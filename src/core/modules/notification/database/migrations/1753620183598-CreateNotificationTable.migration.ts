@@ -5,6 +5,7 @@ import {
   TableForeignKey,
   TableIndex,
 } from 'typeorm';
+import { NotificationChannelEnum, NotificationStatusEnum } from '../../enums';
 
 export class CreateNotificationTable1753620183598
   implements MigrationInterface
@@ -23,11 +24,11 @@ export class CreateNotificationTable1753620183598
           {
             name: 'user_id',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'event_type',
-            type: 'text',
+            type: 'varchar',
             isNullable: false,
           },
           {
@@ -42,12 +43,15 @@ export class CreateNotificationTable1753620183598
           },
           {
             name: 'status',
-            type: 'text',
+            type: 'enum',
+            enum: Object.values(NotificationStatusEnum),
+            default: `"${NotificationStatusEnum.PENDING}"`,
             isNullable: false,
           },
           {
             name: 'channel',
-            type: 'text',
+            type: 'enum',
+            enum: Object.values(NotificationChannelEnum),
             isNullable: false,
           },
           {
@@ -83,7 +87,7 @@ export class CreateNotificationTable1753620183598
         columnNames: ['user_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'users',
-        onDelete: 'NO ACTION',
+        onDelete: 'SET NULL',
       }),
     );
 

@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { NotificationChannel } from '../enums';
+import { NotificationChannelEnum } from '../enums';
 import { User } from '../../auth/entities/user.entity';
 
 @Entity('notification_preferences')
@@ -9,10 +9,10 @@ export class NotificationPreference {
 
   @Column({
     type: 'enum',
-    enum: NotificationChannel,
-    default: NotificationChannel.EMAIL,
+    enum: NotificationChannelEnum,
+    default: NotificationChannelEnum.EMAIL,
   })
-  channel: NotificationChannel;
+  channel: NotificationChannelEnum;
 
   @ManyToOne(() => User, (user) => user.notificationPreferences)
   @JoinColumn({ name: 'user_id' })

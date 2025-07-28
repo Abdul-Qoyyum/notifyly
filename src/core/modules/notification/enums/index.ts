@@ -1,11 +1,11 @@
-export enum NotificationStatus {
+export enum NotificationStatusEnum {
   PENDING = 'pending',
   PROCESSING = 'processing',
   DELIVERED = 'delivered',
   FAILED = 'failed',
 }
 
-export enum NotificationChannel {
+export enum NotificationChannelEnum {
   EMAIL = 'email',
   SMS = 'sms',
   IN_APP = 'in_app',

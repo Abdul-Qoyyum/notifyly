@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../../auth/entities/user.entity';
-import { NotificationStatus } from '../enums';
+import { NotificationChannelEnum, NotificationStatusEnum } from '../enums';
 
 @Entity('notifications')
 export class Notification {
@@ -21,10 +21,10 @@ export class Notification {
   user: User;
 
   @Column('text', { name: 'user_id' })
-  userId: string;
+  user_id: string;
 
   @Column('text', { name: 'event_type' })
-  eventType: string;
+  event_type: string;
 
   @Column('text')
   title: string;
@@ -32,11 +32,18 @@ export class Notification {
   @Column('text')
   body: string;
 
-  @Column('text')
-  status: NotificationStatus;
+  @Column({
+    type: 'enum',
+    enum: NotificationStatusEnum,
+    default: NotificationStatusEnum.PENDING,
+  })
+  status: NotificationStatusEnum;
 
-  @Column('text')
-  channel: string;
+  @Column({
+    type: 'enum',
+    enum: NotificationChannelEnum,
+  })
+  channel: NotificationChannelEnum;
 
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;

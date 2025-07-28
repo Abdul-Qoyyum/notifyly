@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { User } from '../../entities/user.entity';
 import { NotificationPreference } from 'src/core/modules/notification/entities/notification-preference.entity';
-import { NotificationChannel } from 'src/core/modules/notification/enums';
+import { NotificationChannelEnum } from 'src/core/modules/notification/enums';
 import { Logger } from '@nestjs/common';
 
 export default class UserWithNotificationPreferenceSeeder implements Seeder {
@@ -41,7 +41,7 @@ export default class UserWithNotificationPreferenceSeeder implements Seeder {
     });
     await notificationPreferenceFactory.save({
       user: secondUser,
-      channel: NotificationChannel.SMS,
+      channel: NotificationChannelEnum.SMS,
     });
   }
 }
