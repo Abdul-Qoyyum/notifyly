@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Twilio } from 'twilio';
-import { SendCodeDto } from '../dtos';
 import { Notification } from '../../notification/entities/notification.entity';
 import { UserRepository } from '../../auth/repositories/user.repository';
 import { UtilService } from '../../shared/services/utils.service';
@@ -16,15 +15,6 @@ export class SmsService {
     private readonly utilService: UtilService,
     private readonly userRepository: UserRepository,
   ) {}
-
-  async sendCode(sendCodeDto: SendCodeDto) {
-    const { phone_number, code } = sendCodeDto;
-    return this.twilio.messages.create({
-      from: this.configService.get<string>('TWILIO_FROM'),
-      to: phone_number,
-      body: `Your code is ${code}`,
-    });
-  }
 
   async processNotification(payload: Partial<Notification>): Promise<void> {
     this._logger.log(

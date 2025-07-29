@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
-import { TransportController } from './controllers/transport.controller';
 import { EmailService } from './services/email.service';
 import { SmsService } from './services/sms.service';
 import { Twilio } from 'twilio';
@@ -9,7 +8,7 @@ import { UserModule } from '../auth/auth.module';
 
 @Module({
   imports: [UserModule],
-  controllers: [TransportController],
+  controllers: [],
   providers: [
     EmailService,
     SmsService,

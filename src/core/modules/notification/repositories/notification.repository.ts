@@ -1,14 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { Notification } from '../entities/notification.entity';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager, FindOptionsWhere, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NotificationPreference } from '../entities/notification-preference.entity';
 
 @Injectable()
 export class NotificationRepository {
   constructor(
     @InjectRepository(Notification)
     private readonly notificationRepository: Repository<Notification>,
+    @InjectRepository(NotificationPreference)
+    private readonly notificationPreferenceRepository: Repository<NotificationPreference>,
   ) {}
+
+  async getNotificationPreference(
+    query: FindOptionsWhere<NotificationPreference>,
+  ): Promise<NotificationPreference | null> {
+    return this.notificationPreferenceRepository.findOne({ where: query });
+  }
 
   async save(
     data: Partial<Notification>,

@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Notification } from './entities/notification.entity';
-import { NotificationTemplate } from './entities/notification-template.entity';
 import { NotificationPreference } from './entities/notification-preference.entity';
 import { NotificationController } from './controllers/notification.controller';
 import { NotificationRepository } from './repositories/notification.repository';
@@ -15,11 +14,7 @@ import { NotificationQueue } from './queues/notification.queue';
     BullModule.registerQueue({
       name: 'notificationQueue',
     }),
-    TypeOrmModule.forFeature([
-      NotificationTemplate,
-      NotificationPreference,
-      Notification,
-    ]),
+    TypeOrmModule.forFeature([NotificationPreference, Notification]),
     TransportModule,
   ],
   controllers: [NotificationController],

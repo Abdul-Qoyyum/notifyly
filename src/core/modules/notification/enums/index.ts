@@ -9,5 +9,4 @@ export enum NotificationChannelEnum {
   EMAIL = 'email',
   SMS = 'sms',
   IN_APP = 'in_app',
-  NONE = 'none',
 }

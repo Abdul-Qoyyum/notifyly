@@ -44,7 +44,6 @@ export class NotificationQueue extends WorkerHost {
         return this.smsService.processNotification(job.data);
       case NotificationChannelEnum.IN_APP:
         this.logger.log(`in_app notification handled: ${job.name}`);
-        throw new Error(`Unknown job type: ${job.name}`);
         break;
       default:
         this.logger.warn(`Unknown job type: ${job.name}`);
@@ -54,7 +53,6 @@ export class NotificationQueue extends WorkerHost {
 
   @OnWorkerEvent('completed')
   async onCompleted(job: Job) {
-    console.log(`Job ${job.id} completed successfully`);
     this.logger.log(`Job ${job.id} completed successfully`);
     await this.notificationService.saveNotification({
       ...job.data,
@@ -65,17 +63,16 @@ export class NotificationQueue extends WorkerHost {
 
   @OnWorkerEvent('failed')
   async onFailed(job: Job, error: Error) {
-    console.log(`Job ${job.id} failed successfully`);
     this.logger.error(`Job ${job.id} failed: ${error.message}`);
     await this.notificationService.saveNotification({
       ...job.data,
       status: NotificationStatusEnum.FAILED,
+      error_messages: error.message,
     });
   }
 
   @OnWorkerEvent('active')
   async onProgress(job: Job, progress: number) {
-    console.log(`Job ${job.id} active successfully`);
     this.logger.debug(`Job ${job.id} active: ${progress}%`);
     await this.notificationService.saveNotification({
       ...job.data,

@@ -3,7 +3,6 @@ import {
   QueryRunner,
   Table,
   TableForeignKey,
-  TableIndex,
 } from 'typeorm';
 
 export class CreateNotificationPreferencesTable1753621584890
@@ -15,15 +14,26 @@ export class CreateNotificationPreferencesTable1753621584890
         name: 'notification_preferences',
         columns: [
           {
-            name: 'user_id',
+            name: 'id',
             type: 'varchar',
             length: '36',
             isPrimary: true,
           },
           {
+            name: 'user_id',
+            type: 'varchar',
+            length: '36',
+          },
+          {
             name: 'channel',
             type: 'varchar',
             isNullable: false,
+          },
+
+          {
+            name: 'is_enabled',
+            type: 'boolean',
+            default: true,
           },
         ],
       }),

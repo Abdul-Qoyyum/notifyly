@@ -1,8 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Transporter } from 'nodemailer';
-import * as nodemailer from 'nodemailer';
-import { SendMailDto } from '../dtos';
 import { Notification } from '../../notification/entities/notification.entity';
 import { UtilService } from '../../shared/services/utils.service';
 import { UserRepository } from '../../auth/repositories/user.repository';
@@ -19,19 +17,6 @@ export class EmailService {
     private readonly userRepository: UserRepository,
   ) {
     this.mailFrom = this.cfg.get<string>('MAIL_FROM');
-  }
-
-  async sendWelcome(
-    sendMailDto: SendMailDto,
-  ): Promise<nodemailer.SentMessageInfo> {
-    const { email } = sendMailDto;
-    return this.transport.sendMail({
-      from: this.cfg.get<string>('MAIL_FROM'),
-      to: email,
-      subject: 'Welcome!',
-      text: 'Hello from Mailtrap sandbox 👋',
-      html: '<p>Hello from <b>Mailtrap</b> sandbox 👋</p>',
-    });
   }
 
   async processNotification(payload: Partial<Notification>): Promise<void> {
