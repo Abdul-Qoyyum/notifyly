@@ -4,7 +4,7 @@ import { NotificationEventDto } from '../dtos';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import CoreController from 'src/core/http/controllers/core.controller';
-import { EventPattern } from '@nestjs/microservices';
+import { EventPattern, Payload } from '@nestjs/microservices';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('notifications')
@@ -39,7 +39,7 @@ export class NotificationController extends CoreController {
 
   @EventPattern('notification.*')
   async handleNotificationEvent(
-    @Body() notificationEventDto: NotificationEventDto,
+    @Payload() notificationEventDto: NotificationEventDto,
   ) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();

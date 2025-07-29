@@ -49,7 +49,7 @@ async function bootstrap() {
 }
 bootstrap()
   .then(() => {
-    console.log(`Application is running on: ${process.env.PORT ?? 3000}`);
+    console.log(`Application is running on: ${process.env.PORT ?? 8081}`);
   })
   .catch((err) => {
     console.error('Error starting application:', err);

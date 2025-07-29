@@ -19,10 +19,10 @@ export class User {
   @Column('text')
   name: string;
 
-  @Column('text')
+  @Column('varchar', { length: 255, unique: true })
   email: string;
 
-  @Column('text')
+  @Column('varchar', { length: 255 })
   phone: string;
 
   @CreateDateColumn({ name: 'created_at' })
