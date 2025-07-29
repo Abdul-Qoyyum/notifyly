@@ -45,6 +45,9 @@ export class Notification {
   })
   channel: NotificationChannelEnum;
 
+  @Column('text', { nullable: true })
+  error_messages?: string;
+
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
 

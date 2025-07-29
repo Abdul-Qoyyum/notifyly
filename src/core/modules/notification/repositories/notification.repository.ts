@@ -1,15 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { Notification } from '../entities/notification.entity';
-import { EntityManager } from 'typeorm';
-import { SendNotificationDto } from '../dtos';
-// import { InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class NotificationRepository {
-  constructor() {} // @InjectRepository(Notification) notification: Notification
+  constructor(
+    @InjectRepository(Notification)
+    private readonly notificationRepository: Repository<Notification>,
+  ) {}
 
-  async save(data: SendNotificationDto, manager: EntityManager) {
-    const notification = manager.create(Notification, data);
-    return await manager.save(notification);
+  async save(
+    data: Partial<Notification>,
+    manager: EntityManager | null = null,
+  ) {
+    const entity = this.notificationRepository.create(data);
+    return manager
+      ? await manager.save(entity)
+      : await this.notificationRepository.save(entity);
   }
 }

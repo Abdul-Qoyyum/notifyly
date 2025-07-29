@@ -16,15 +16,14 @@ export class SendNotificationDto {
   @MaxLength(15)
   event_type: string;
 
-  @ApiProperty({ example: 'New Invoice Created' })
+  @ApiProperty({ example: 'New Invoice Created (#{invoiceId})' })
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
   title: string;
 
   @ApiProperty({
-    example:
-      'Your invoice #{invoiceId} has been created. The amount is #{amount}',
+    example: `Your invoice #{invoiceId} has been created. The amount is #{amount}`,
   })
   @IsString()
   @IsNotEmpty()

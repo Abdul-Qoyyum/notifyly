@@ -5,9 +5,10 @@ import { TransportController } from './controllers/transport.controller';
 import { EmailService } from './services/email.service';
 import { SmsService } from './services/sms.service';
 import { Twilio } from 'twilio';
+import { UserModule } from '../auth/auth.module';
 
 @Module({
-  imports: [],
+  imports: [UserModule],
   controllers: [TransportController],
   providers: [
     EmailService,

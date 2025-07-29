@@ -41,6 +41,7 @@ export class CreateNotificationTable1753620183598
             type: 'text',
             isNullable: false,
           },
+
           {
             name: 'status',
             type: 'enum',
@@ -53,6 +54,11 @@ export class CreateNotificationTable1753620183598
             type: 'enum',
             enum: Object.values(NotificationChannelEnum),
             isNullable: false,
+          },
+          {
+            name: 'error_messages',
+            type: 'text',
+            isNullable: true,
           },
           {
             name: 'created_at',

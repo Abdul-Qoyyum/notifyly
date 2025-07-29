@@ -3,12 +3,32 @@ import { NotificationRepository } from '../repositories/notification.repository'
 import { SendNotificationDto } from '../dtos';
 import { EntityManager } from 'typeorm';
 import { NotificationStatusEnum } from '../enums';
+import { Notification } from '../entities/notification.entity';
+import { Queue } from 'bullmq';
+import { InjectQueue } from '@nestjs/bullmq';
 
 @Injectable()
 export class NotificationService {
+  defaultJobOptions: {
+    attempts: number;
+    backoff: { type: string; delay: number };
+    removeOnComplete: boolean;
+    removeOnFail: number;
+  };
   constructor(
+    @InjectQueue('notificationQueue') private readonly notificationQueue: Queue,
     private readonly notificationRepository: NotificationRepository,
-  ) {}
+  ) {
+    this.defaultJobOptions = {
+      attempts: 3,
+      backoff: {
+        type: 'exponential',
+        delay: 1000,
+      },
+      removeOnComplete: true,
+      removeOnFail: 100,
+    };
+  }
 
   async sendNotification(
     sendNotificationDto: SendNotificationDto,
@@ -27,5 +47,18 @@ export class NotificationService {
     };
 
     return await this.notificationRepository.save(notificationData, manager);
+  }
+
+  async queueNotification(data: Partial<Notification>) {
+    const { channel } = data;
+    await this.notificationQueue.add(
+      channel as string,
+      data,
+      this.defaultJobOptions,
+    );
+  }
+
+  async saveNotification(payload: Partial<Notification>) {
+    return await this.notificationRepository.save(payload);
   }
 }
