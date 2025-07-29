@@ -21,7 +21,7 @@ export class NotificationController extends CoreController {
   @ApiOperation({
     summary: 'Simulates how a notification event is emitted',
     description:
-      'Demonstrates how to emit a notification event from different microservices connect to the same RabbitMQ(queue) Broker',
+      'Demonstrates how to emit a notification event from different microservices connected to the same RabbitMQ(queue) Broker',
   })
   @Post('event-emit')
   emitNotificationEvent(@Body() notificationEventDto: NotificationEventDto) {
