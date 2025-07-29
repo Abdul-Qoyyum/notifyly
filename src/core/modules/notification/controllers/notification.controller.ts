@@ -5,7 +5,9 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import CoreController from 'src/core/http/controllers/core.controller';
 import { EventPattern } from '@nestjs/microservices';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
+@ApiTags('notifications')
 @Controller('notifications')
 export class NotificationController extends CoreController {
   constructor(
@@ -16,7 +18,12 @@ export class NotificationController extends CoreController {
     super();
   }
 
-  @Post('event/emit')
+  @ApiOperation({
+    summary: 'Simulates how a notification event is emitted',
+    description:
+      'Demonstrates how to emit a notification event from different microservices connect to the same RabbitMQ(queue) Broker',
+  })
+  @Post('event-emit')
   emitNotificationEvent(@Body() notificationEventDto: NotificationEventDto) {
     try {
       const response =
