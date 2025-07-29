@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 import { NotificationChannelEnum } from '../enums';
 
-export class SendNotificationDto {
+export class NotificationEventDto {
   @ApiProperty({ example: 'invoice.created' })
   @IsString()
   @IsNotEmpty()

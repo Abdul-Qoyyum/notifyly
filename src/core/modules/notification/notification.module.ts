@@ -9,11 +9,28 @@ import { NotificationSubscriber } from './subscribers/notification.subscriber';
 import { TransportModule } from '../transport/transport.module';
 import { BullModule } from '@nestjs/bullmq';
 import { NotificationQueue } from './queues/notification.queue';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { NOTIFYLY_QUEUE, RABBITMQ_URL } from 'src/core/constants';
+
 @Module({
   imports: [
     BullModule.registerQueue({
       name: 'notificationQueue',
     }),
+    ClientsModule.register([
+      {
+        name: NOTIFYLY_QUEUE,
+        transport: Transport.RMQ,
+        options: {
+          urls: [RABBITMQ_URL],
+          queue: `${NOTIFYLY_QUEUE}`,
+          queueOptions: {
+            durable: true,
+          },
+          wildcards: true,
+        },
+      },
+    ]),
     TypeOrmModule.forFeature([NotificationPreference, Notification]),
     TransportModule,
   ],

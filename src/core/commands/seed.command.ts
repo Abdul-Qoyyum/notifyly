@@ -2,12 +2,14 @@ import { Command, CommandRunner } from 'nest-commander';
 import { DataSource } from 'typeorm';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { runSeeders } from 'typeorm-extension';
+import { Logger } from '@nestjs/common';
 
 @Command(<{ name: string; description: string }>{
   name: 'seed',
   description: 'Seed database with data',
 })
 export class SeedCommand extends CommandRunner {
+  private readonly _logger = new Logger(SeedCommand.name);
   constructor(
     @InjectDataSource()
     private readonly dataSource: DataSource,
@@ -20,6 +22,6 @@ export class SeedCommand extends CommandRunner {
       seeds: ['src/**/database/seeders/**/*{.ts,.js}'],
       factories: ['src/**/database/factories/**/*{.ts,.js}'],
     });
-    console.log('Database seeded successfully!');
+    this._logger.log('Bootstrapped successfully!');
   }
 }

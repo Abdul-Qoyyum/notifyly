@@ -1,11 +1,26 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
 import { CommandFactory } from 'nest-commander';
 import { ValidationPipe } from '@nestjs/common';
+import { NOTIFYLY_QUEUE, RABBITMQ_URL } from './core/constants';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const app = await NestFactory.create(AppModule, {
+    logger: ['log', 'error', 'warn', 'debug', 'verbose'],
+  });
+
+  app.connectMicroservice({
+    transport: Transport.RMQ,
+    options: {
+      urls: [RABBITMQ_URL],
+      queue: `${NOTIFYLY_QUEUE}`,
+      queueOptions: { durable: true },
+      prefetchCount: 1,
+      wildcards: true,
+    },
+  });
 
   app.setGlobalPrefix('api');
 
@@ -29,7 +44,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   await CommandFactory.run(AppModule);
-
+  await app.startAllMicroservices();
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap()
