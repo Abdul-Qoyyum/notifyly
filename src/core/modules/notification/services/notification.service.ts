@@ -76,7 +76,10 @@ export class NotificationService {
       metadata: metadata || null,
     };
 
-    return await this.notificationRepository.save(notificationData, manager);
+    return await this.notificationRepository.saveNotification(
+      notificationData,
+      manager,
+    );
   }
 
   async queueNotification(data: Partial<Notification>) {
@@ -101,7 +104,10 @@ export class NotificationService {
     }
   }
 
-  async saveNotification(payload: Partial<Notification>) {
-    return await this.notificationRepository.save(payload);
+  async updateNotification(payload: Partial<Notification>): Promise<void> {
+    const { id } = payload;
+    if (id) {
+      await this.notificationRepository.updateNotificationById(id, payload);
+    }
   }
 }

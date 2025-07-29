@@ -54,7 +54,7 @@ export class NotificationQueue extends WorkerHost {
   @OnWorkerEvent('completed')
   async onCompleted(job: Job) {
     this.logger.log(`Job ${job.id} completed successfully`);
-    await this.notificationService.saveNotification({
+    await this.notificationService.updateNotification({
       ...job.data,
       status: NotificationStatusEnum.DELIVERED,
       delivered_at: new Date(),
@@ -64,7 +64,7 @@ export class NotificationQueue extends WorkerHost {
   @OnWorkerEvent('failed')
   async onFailed(job: Job, error: Error) {
     this.logger.error(`Job ${job.id} failed: ${error.message}`);
-    await this.notificationService.saveNotification({
+    await this.notificationService.updateNotification({
       ...job.data,
       status: NotificationStatusEnum.FAILED,
       error_messages: error.message,
@@ -74,7 +74,7 @@ export class NotificationQueue extends WorkerHost {
   @OnWorkerEvent('active')
   async onProgress(job: Job, progress: number) {
     this.logger.debug(`Job ${job.id} active: ${progress}%`);
-    await this.notificationService.saveNotification({
+    await this.notificationService.updateNotification({
       ...job.data,
       status: NotificationStatusEnum.PROCESSING,
     });

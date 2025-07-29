@@ -19,13 +19,12 @@ export class NotificationRepository {
     return this.notificationPreferenceRepository.findOne({ where: query });
   }
 
-  async save(
-    data: Partial<Notification>,
-    manager: EntityManager | null = null,
-  ) {
+  async saveNotification(data: Partial<Notification>, manager: EntityManager) {
     const entity = this.notificationRepository.create(data);
-    return manager
-      ? await manager.save(entity)
-      : await this.notificationRepository.save(entity);
+    return await manager.save(entity);
+  }
+
+  async updateNotificationById(id: string, data: Partial<Notification>) {
+    return this.notificationRepository.update(id, data);
   }
 }

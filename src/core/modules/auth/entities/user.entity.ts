@@ -6,17 +6,22 @@ import {
   UpdateDateColumn,
   OneToMany,
   BeforeInsert,
+  ManyToOne,
+  JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { Notification } from '../../notification/entities/notification.entity';
 import { NotificationPreference } from '../../notification/entities/notification-preference.entity';
+import { Role } from './role.entity';
+import { UserAuth } from './user_auths.entity';
 
 @Entity('users')
 export class User {
   @PrimaryColumn('varchar', { length: 36 })
   id: string;
 
-  @Column('text')
+  @Column('varchar', { length: 255 })
   name: string;
 
   @Column('varchar', { length: 255, unique: true })
@@ -25,6 +30,9 @@ export class User {
   @Column('varchar', { length: 255 })
   phone: string;
 
+  @Column('varchar', { name: 'role_id', length: 36 })
+  role_id: string;
+
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
 
@@ -32,6 +40,13 @@ export class User {
   updated_at: Date;
 
   // Relations
+  @OneToOne(() => UserAuth, (user) => user.user)
+  user_auth: UserAuth;
+
+  @ManyToOne(() => Role, (role) => role.users)
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
+
   @OneToMany(() => Notification, (notification) => notification.user)
   notifications: Notification[];
 

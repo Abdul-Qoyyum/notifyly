@@ -10,3 +10,8 @@ export enum NotificationChannelEnum {
   SMS = 'sms',
   IN_APP = 'in_app',
 }
+
+export enum RoleEnum {
+  USER = 'user',
+  ADMIN = 'admin',
+}
