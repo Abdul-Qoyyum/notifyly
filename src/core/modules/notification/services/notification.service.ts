@@ -1,4 +1,10 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { NotificationRepository } from '../repositories/notification.repository';
 import { NotificationEventDto } from '../dtos';
 import { EntityManager } from 'typeorm';
@@ -92,7 +98,24 @@ export class NotificationService {
     return true;
   }
 
-  async queueNotification(data: Partial<Notification>) {
+  async retryNotification(notificationId: string) {
+    const notification = await this.notificationRepository.getNotification({
+      id: notificationId,
+    });
+    if (!notification) {
+      throw new NotFoundException('Notification not found');
+    }
+
+    if (notification.status !== NotificationStatusEnum.FAILED) {
+      throw new BadRequestException(
+        'Only failed notification could be retried',
+      );
+    }
+    await this.queueNotification(notification);
+    return { notification };
+  }
+
+  async queueNotification(data: Partial<Notification>): Promise<void> {
     const { channel, user_id } = data;
     if (user_id) {
       const notificationPreference =

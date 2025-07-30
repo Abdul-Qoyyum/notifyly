@@ -14,7 +14,7 @@ export class AuthController extends CoreController {
   }
 
   @IsPublic()
-  @Post()
+  @Post('login')
   async login(@Body() payload: LoginDto) {
     try {
       const response = await this.authService.login(payload);

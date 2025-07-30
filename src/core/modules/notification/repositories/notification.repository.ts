@@ -19,6 +19,10 @@ export class NotificationRepository {
     return this.notificationPreferenceRepository.findOne({ where: query });
   }
 
+  async getNotification(query: FindOptionsWhere<Notification>) {
+    return await this.notificationRepository.findOne({ where: query });
+  }
+
   async getNotificationPreferences(
     query: FindOptionsWhere<NotificationPreference>,
   ): Promise<NotificationPreference[] | []> {

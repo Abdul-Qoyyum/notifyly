@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Logger,
+  Param,
   Post,
   Query,
   UseGuards,
@@ -110,6 +111,22 @@ export class NotificationController extends CoreController {
         notificationEventDto,
         user,
       );
+      return this.successResponse(
+        'Notification successfully queued for processing',
+        response,
+      );
+    } catch (error) {
+      return this.exceptionResponse(error);
+    }
+  }
+
+  @Post('retry/:notificationId')
+  @UseGuards(RolesGuard)
+  @Roles(RoleEnum.ADMIN)
+  async retryNotification(@Param('notificationId') notificationId: string) {
+    try {
+      const response =
+        await this.notificationService.retryNotification(notificationId);
       return this.successResponse(
         'Notification successfully queued for processing',
         response,

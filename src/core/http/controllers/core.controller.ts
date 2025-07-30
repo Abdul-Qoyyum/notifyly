@@ -18,29 +18,15 @@ abstract class CoreController {
   }
 
   exceptionResponse(error: unknown) {
-    const message =
-      typeof error === 'object' && error !== null && 'message' in error
-        ? String((error as { message?: unknown }).message)
-        : 'An unexpected error occurred';
-    const data =
-      typeof error === 'object' &&
-      error !== null &&
-      'response' in error &&
-      typeof error.response === 'object'
-        ? error.response
-        : error !== null
-          ? { ...error }
-          : { error };
-    const statusCode =
-      typeof error === 'object' &&
-      error !== null &&
-      'response' in error &&
-      typeof error.response === 'object' &&
-      error.response !== null &&
-      'statusCode' in error.response
-        ? (error.response.statusCode as number)
-        : undefined;
-    return this.errorResponse(message, data, statusCode);
+    if (typeof error === 'object' && error !== null && 'response' in error) {
+      return error.response;
+    }
+    return {
+      success: false,
+      message: 'An unexpected error occurred',
+      error: 'Internal Server Error',
+      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+    };
   }
 }
 
