@@ -48,3 +48,12 @@ export class NotificationEventDto {
   @IsOptional()
   user_id?: string;
 }
+
+export class PaginationResponseDto<T> {
+  data: T[];
+  meta: {
+    total: number;
+    page: number;
+    lastPage: number;
+  };
+}

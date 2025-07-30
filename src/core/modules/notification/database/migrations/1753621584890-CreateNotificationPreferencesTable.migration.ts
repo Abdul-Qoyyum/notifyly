@@ -29,7 +29,6 @@ export class CreateNotificationPreferencesTable1753621584890
             type: 'varchar',
             isNullable: false,
           },
-
           {
             name: 'is_enabled',
             type: 'boolean',

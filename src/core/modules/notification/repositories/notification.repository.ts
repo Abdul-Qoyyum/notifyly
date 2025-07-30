@@ -33,4 +33,28 @@ export class NotificationRepository {
   async updateNotificationById(id: string, data: Partial<Notification>) {
     return this.notificationRepository.update(id, data);
   }
+
+  async getNotifications(
+    query: Partial<Notification>,
+    payload: { skip: number; limit: number },
+  ) {
+    const { skip, limit } = payload;
+
+    const queryBuilder =
+      this.notificationRepository.createQueryBuilder('notifications');
+
+    Object.keys(query).forEach((key) => {
+      queryBuilder.andWhere(`notifications.${key} = :${key}`, {
+        [key]: query[key],
+      });
+    });
+    queryBuilder.skip(skip).take(limit).orderBy('created_at', 'DESC');
+
+    const [data, total] = await queryBuilder.getManyAndCount();
+
+    return {
+      data,
+      total,
+    };
+  }
 }

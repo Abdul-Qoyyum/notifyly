@@ -1,13 +1,34 @@
-import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { NotificationService } from '../services/notification.service';
 import { NotificationEventDto } from '../dtos';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import CoreController from 'src/core/http/controllers/core.controller';
 import { EventPattern, Payload } from '@nestjs/microservices';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { Auth } from '../../auth/decorators';
 import { User } from '../../auth/entities/user.entity';
+import { PaginationParams } from '../interfaces';
+import {
+  NotificationChannelEnum,
+  NotificationStatusEnum,
+  RoleEnum,
+} from '../enums';
+import { RolesGuard } from '../../auth/guards/roles.guard';
+import { Roles } from '../../auth/decorators';
 
 @ApiTags('notifications')
 @Controller('notifications')
@@ -21,6 +42,57 @@ export class NotificationController extends CoreController {
     private readonly notificationService: NotificationService,
   ) {
     super();
+  }
+
+  @Get('in-app')
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  async getInAppNotifications(
+    @Query() paginationParams: PaginationParams,
+    @Auth() user: Partial<User>,
+  ) {
+    try {
+      const response = await this.notificationService.getInAppNotifications(
+        paginationParams,
+        user,
+      );
+      return this.successResponse(
+        'Notification successfully retrieved',
+        response,
+      );
+    } catch (error) {
+      return this.exceptionResponse(error);
+    }
+  }
+
+  @Get('admin')
+  @UseGuards(RolesGuard)
+  @Roles(RoleEnum.ADMIN)
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    type: String,
+    enum: Object.values(NotificationStatusEnum),
+  })
+  @ApiQuery({
+    name: 'channel',
+    required: false,
+    type: String,
+    enum: Object.values(NotificationChannelEnum),
+  })
+  async getAdminNotifications(@Query() paginationParams: PaginationParams) {
+    try {
+      const response =
+        await this.notificationService.getNotifications(paginationParams);
+      return this.successResponse(
+        'Notification successfully retrieved',
+        response,
+      );
+    } catch (error) {
+      return this.exceptionResponse(error);
+    }
   }
 
   @ApiOperation({

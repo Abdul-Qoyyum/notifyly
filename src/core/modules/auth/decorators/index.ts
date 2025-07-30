@@ -4,9 +4,13 @@ import {
   SetMetadata,
 } from '@nestjs/common';
 import { User } from '../entities/user.entity';
+import { RoleEnum } from '../../notification/enums';
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const IsPublic = () => SetMetadata(IS_PUBLIC_KEY, true);
+
+export const ROLES_KEY = 'roles';
+export const Roles = (...roles: RoleEnum[]) => SetMetadata(ROLES_KEY, roles);
 
 type Req = Request & { user: User };
 

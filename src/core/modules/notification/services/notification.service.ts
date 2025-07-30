@@ -2,13 +2,14 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { NotificationRepository } from '../repositories/notification.repository';
 import { NotificationEventDto } from '../dtos';
 import { EntityManager } from 'typeorm';
-import { NotificationStatusEnum } from '../enums';
+import { NotificationChannelEnum, NotificationStatusEnum } from '../enums';
 import { Notification } from '../entities/notification.entity';
 import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bullmq';
 import { ClientProxy } from '@nestjs/microservices';
 import { NOTIFYLY_QUEUE } from 'src/core/constants';
 import { User } from '../../auth/entities/user.entity';
+import { PaginationParams } from '../interfaces';
 
 @Injectable()
 export class NotificationService {
@@ -124,5 +125,54 @@ export class NotificationService {
     return this.notificationRepository.getNotificationPreferences({
       user_id: user.id,
     });
+  }
+
+  async getInAppNotifications(options: PaginationParams, user: Partial<User>) {
+    const { page = 1, limit = 10 } = options || {};
+    const skip = (page - 1) * limit;
+
+    const query: Partial<Notification> | Record<string, string> = {
+      user_id: user.id,
+      channel: NotificationChannelEnum.IN_APP,
+    };
+
+    const { data, total } = await this.notificationRepository.getNotifications(
+      query,
+      {
+        skip,
+        limit,
+      },
+    );
+    const lastPage = Math.ceil(total / limit);
+    return {
+      notifications: data,
+      meta: {
+        total,
+        page,
+        lastPage,
+      },
+    };
+  }
+
+  async getNotifications(options: PaginationParams) {
+    const { page = 1, limit = 10, ...rest } = options || {};
+    const skip = (page - 1) * limit;
+    const query: Partial<Notification> | Record<string, string> = rest;
+    const { data, total } = await this.notificationRepository.getNotifications(
+      query,
+      {
+        skip,
+        limit,
+      },
+    );
+    const lastPage = Math.ceil(total / limit);
+    return {
+      notifications: data,
+      meta: {
+        total,
+        page,
+        lastPage,
+      },
+    };
   }
 }
