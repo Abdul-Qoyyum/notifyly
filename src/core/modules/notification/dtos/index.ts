@@ -43,4 +43,8 @@ export class NotificationEventDto {
   @IsOptional()
   @IsObject({ message: 'Metadata must be a valid JSON object' })
   metadata?: Record<string, any> | null;
+
+  @IsString()
+  @IsOptional()
+  user_id?: string;
 }

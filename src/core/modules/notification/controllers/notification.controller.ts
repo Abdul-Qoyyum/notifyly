@@ -1,15 +1,20 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Logger, Post } from '@nestjs/common';
 import { NotificationService } from '../services/notification.service';
 import { NotificationEventDto } from '../dtos';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import CoreController from 'src/core/http/controllers/core.controller';
 import { EventPattern, Payload } from '@nestjs/microservices';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { Auth } from '../../auth/decorators';
+import { User } from '../../auth/entities/user.entity';
 
 @ApiTags('notifications')
 @Controller('notifications')
+@ApiBearerAuth()
 export class NotificationController extends CoreController {
+  private readonly logger = new Logger(NotificationController.name);
+
   constructor(
     @InjectDataSource()
     private readonly dataSource: DataSource,
@@ -24,10 +29,15 @@ export class NotificationController extends CoreController {
       'Demonstrates how to emit a notification event from different microservices connected to the same RabbitMQ(queue) Broker',
   })
   @Post('event-emit')
-  emitNotificationEvent(@Body() notificationEventDto: NotificationEventDto) {
+  emitNotificationEvent(
+    @Body() notificationEventDto: NotificationEventDto,
+    @Auth() user: Partial<User>,
+  ) {
     try {
-      const response =
-        this.notificationService.emitNotificationEvent(notificationEventDto);
+      const response = this.notificationService.emitNotificationEvent(
+        notificationEventDto,
+        user,
+      );
       return this.successResponse(
         'Notification successfully queued for processing',
         response,
@@ -44,18 +54,15 @@ export class NotificationController extends CoreController {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();
     try {
-      const response = await this.notificationService.handleNotificationEvent(
+      await this.notificationService.handleNotificationEvent(
         notificationEventDto,
         queryRunner.manager,
       );
       await queryRunner.commitTransaction();
-      return this.successResponse(
-        'Notification successfully queued for processing',
-        response,
-      );
+      this.logger.log('Notification successfully queued for processing');
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      return this.exceptionResponse(error);
+      this.logger.error(error?.message);
     } finally {
       await queryRunner.release();
     }

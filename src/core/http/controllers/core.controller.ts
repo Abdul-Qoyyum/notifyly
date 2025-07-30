@@ -23,12 +23,23 @@ abstract class CoreController {
         ? String((error as { message?: unknown }).message)
         : 'An unexpected error occurred';
     const data =
-      typeof error === 'object' && error !== null ? { ...error } : { error };
+      typeof error === 'object' &&
+      error !== null &&
+      'response' in error &&
+      typeof error.response === 'object'
+        ? error.response
+        : error !== null
+          ? { ...error }
+          : { error };
     const statusCode =
-      typeof error === 'object' && error !== null && 'statusCode' in error
-        ? (error as { statusCode?: number }).statusCode
+      typeof error === 'object' &&
+      error !== null &&
+      'response' in error &&
+      typeof error.response === 'object' &&
+      error.response !== null &&
+      'statusCode' in error.response
+        ? (error.response.statusCode as number)
         : undefined;
-
     return this.errorResponse(message, data, statusCode);
   }
 }

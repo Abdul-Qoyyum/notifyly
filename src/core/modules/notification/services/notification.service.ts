@@ -8,6 +8,7 @@ import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bullmq';
 import { ClientProxy } from '@nestjs/microservices';
 import { NOTIFYLY_QUEUE } from 'src/core/constants';
+import { User } from '../../auth/entities/user.entity';
 
 @Injectable()
 export class NotificationService {
@@ -40,13 +41,16 @@ export class NotificationService {
    * @param notificationEventDto
    * @returns
    */
-  emitNotificationEvent(notificationEventDto: NotificationEventDto) {
+  emitNotificationEvent(
+    notificationEventDto: NotificationEventDto,
+    user: Partial<User>,
+  ) {
     this.logger.log(
       `notificationEventDto: ${JSON.stringify(notificationEventDto)}`,
     );
     const { event_type, title, body, channel, metadata } = notificationEventDto;
     const notificationData = {
-      user_id: '6915b2cd-d986-4d97-ad99-442492aaa32b', //test
+      user_id: user.id,
       event_type,
       title,
       body,
@@ -66,20 +70,25 @@ export class NotificationService {
     );
     const { event_type, title, body, channel, metadata } = notificationEventDto;
 
-    const notificationData = {
-      user_id: '3439efdb-d58d-434c-b29a-b905d3bb7e3d', //test
-      event_type,
-      title,
-      body,
-      status: NotificationStatusEnum.PENDING,
-      channel,
-      metadata: metadata || null,
-    };
+    if (notificationEventDto.user_id) {
+      const { user_id } = notificationEventDto;
+      const notificationData = {
+        user_id,
+        event_type,
+        title,
+        body,
+        status: NotificationStatusEnum.PENDING,
+        channel,
+        metadata: metadata || null,
+      };
 
-    return await this.notificationRepository.saveNotification(
-      notificationData,
-      manager,
-    );
+      await this.notificationRepository.saveNotification(
+        notificationData,
+        manager,
+      );
+    }
+
+    return true;
   }
 
   async queueNotification(data: Partial<Notification>) {
