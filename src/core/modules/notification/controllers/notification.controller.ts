@@ -1,4 +1,4 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
 import { NotificationService } from '../services/notification.service';
 import { NotificationEventDto } from '../dtos';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -40,6 +40,25 @@ export class NotificationController extends CoreController {
       );
       return this.successResponse(
         'Notification successfully queued for processing',
+        response,
+      );
+    } catch (error) {
+      return this.exceptionResponse(error);
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Get user notification preferences settings',
+    description:
+      'Get the notification preferences settings for the authenticated user, the `is_enabled` field indicates the active channels by which the user would be able to retrieve notifications',
+  })
+  @Get('user-notification-preferences')
+  async getUserNotificationPreferences(@Auth() user: Partial<User>) {
+    try {
+      const response =
+        await this.notificationService.getUserNotificationPreferences(user);
+      return this.successResponse(
+        'Notification preferences successfully retrieved',
         response,
       );
     } catch (error) {

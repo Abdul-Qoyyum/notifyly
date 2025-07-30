@@ -119,4 +119,10 @@ export class NotificationService {
       await this.notificationRepository.updateNotificationById(id, payload);
     }
   }
+
+  async getUserNotificationPreferences(user: Partial<User>) {
+    return this.notificationRepository.getNotificationPreferences({
+      user_id: user.id,
+    });
+  }
 }

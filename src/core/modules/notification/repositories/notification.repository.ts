@@ -19,6 +19,12 @@ export class NotificationRepository {
     return this.notificationPreferenceRepository.findOne({ where: query });
   }
 
+  async getNotificationPreferences(
+    query: FindOptionsWhere<NotificationPreference>,
+  ): Promise<NotificationPreference[] | []> {
+    return this.notificationPreferenceRepository.find({ where: query });
+  }
+
   async saveNotification(data: Partial<Notification>, manager: EntityManager) {
     const entity = this.notificationRepository.create(data);
     return await manager.save(entity);
