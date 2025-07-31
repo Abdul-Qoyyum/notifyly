@@ -5,6 +5,9 @@ import { AppModule } from './app.module';
 import { CommandFactory } from 'nest-commander';
 import { ValidationPipe } from '@nestjs/common';
 import { NOTIFYLY_QUEUE, RABBITMQ_URL } from './core/constants';
+import morgan from 'morgan';
+import cors from 'cors';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -23,6 +26,10 @@ async function bootstrap() {
   });
 
   app.setGlobalPrefix('api');
+  app.use(helmet());
+  app.enableCors();
+  app.use(morgan('dev'));
+  app.use(cors());
 
   app.useGlobalPipes(
     new ValidationPipe({

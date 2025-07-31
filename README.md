@@ -65,6 +65,17 @@ Follow the steps below to set up the application locally:
 9. **Accessing the Docker MySQL Database**  
    Using the `DB_USERNAME` and `DB_PASSWORD` credentials, you can connect to the database via a MySQL client on port `3307`.
 
+## 🧪 Running Tests
+To run the test suite, follow these steps:
+1. Install all required dependencies:
+   ```bash
+   npm install
+   ```
+2. **Execute end-to-end tests:**
+   ```bash
+     npm run test:e2e 
+   ```
+
 ## 📂 Project Structure
 ```angular2html
     notifyly/
@@ -73,6 +84,20 @@ Follow the steps below to set up the application locally:
     ├── .env.example        # Environment configuration
     └── ...
 ```
+
+## Sample notification event
+The title and body fields can include placeholders using the #{} syntax (e.g., #{orderId}). If the corresponding fields are present in the metadata object, Notifyly will automatically parse and replace the placeholders with their respective values before sending the notification.
+```bash
+   {
+   
+     "event_type": "orders.shipped",
+     "title": "New Invoice Created (#{orderId})",
+     "body": "Your invoice #{orderId} has been shipped. The amount is #{amount}",
+     "channel": "email",
+     "metadata": { "orderId": "R43223434", "amount": 100 }
+   }
+   ```
+
 
 ## 🛠️ Technologies Used
 - Node.Js
