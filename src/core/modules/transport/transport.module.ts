@@ -4,10 +4,10 @@ import * as nodemailer from 'nodemailer';
 import { EmailService } from './services/email.service';
 import { SmsService } from './services/sms.service';
 import { Twilio } from 'twilio';
-import { UserModule } from '../auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [UserModule],
+  imports: [AuthModule],
   controllers: [],
   providers: [
     EmailService,

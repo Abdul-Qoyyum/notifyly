@@ -7,7 +7,7 @@ import moment from 'moment';
 import { LoginDto } from '../dtos';
 import { UserRepository } from '../repositories/user.repository';
 import { UtilService } from '../../shared/services/utils.service';
-import { ACCESS_TOKEN_EXPIRES } from 'src/core/constants';
+import { ACCESS_TOKEN_EXPIRES } from '../../../constants';
 
 @Injectable()
 export class AuthService {

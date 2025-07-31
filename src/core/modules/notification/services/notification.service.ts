@@ -13,7 +13,7 @@ import { Notification } from '../entities/notification.entity';
 import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bullmq';
 import { ClientProxy } from '@nestjs/microservices';
-import { NOTIFYLY_QUEUE } from 'src/core/constants';
+import { NOTIFYLY_QUEUE } from '../../../../core/constants';
 import { User } from '../../auth/entities/user.entity';
 import { PaginationParams } from '../interfaces';
 

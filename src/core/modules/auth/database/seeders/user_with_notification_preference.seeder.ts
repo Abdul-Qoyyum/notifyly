@@ -4,11 +4,8 @@ import { Logger } from '@nestjs/common';
 import { hash, genSalt } from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../../entities/user.entity';
-import { NotificationPreference } from 'src/core/modules/notification/entities/notification-preference.entity';
-import {
-  NotificationChannelEnum,
-  RoleEnum,
-} from 'src/core/modules/notification/enums';
+import { NotificationPreference } from '../../../notification/entities/notification-preference.entity';
+import { NotificationChannelEnum, RoleEnum } from '../../../notification/enums';
 import { Role } from '../../entities/role.entity';
 import { UserAuth } from '../../entities/user_auths.entity';
 

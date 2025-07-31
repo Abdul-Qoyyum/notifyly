@@ -19,7 +19,7 @@ export class NotificationPreference {
   user_id: string;
 
   @Column({
-    type: 'enum',
+    type: 'varchar',
     enum: NotificationChannelEnum,
     default: NotificationChannelEnum.EMAIL,
   })

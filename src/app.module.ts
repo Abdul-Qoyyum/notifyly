@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 import { TransportModule } from './core/modules/transport/transport.module';
 import { DatabaseModule } from './database.module';
 import { NotificationModule } from './core/modules/notification/notification.module';
-import { UserModule } from './core/modules/auth/auth.module';
+import { AuthModule } from './core/modules/auth/auth.module';
 import { CommandModule } from './core/commands/command.module';
 import { SharedModule } from './core/modules/shared/shared.module';
 
@@ -24,7 +24,7 @@ import { SharedModule } from './core/modules/shared/shared.module';
     }),
     DatabaseModule,
     SharedModule,
-    UserModule,
+    AuthModule,
     NotificationModule,
     TransportModule,
     CommandModule,

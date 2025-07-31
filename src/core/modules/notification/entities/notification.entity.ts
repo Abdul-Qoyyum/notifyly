@@ -33,14 +33,14 @@ export class Notification {
   body: string;
 
   @Column({
-    type: 'enum',
+    type: 'varchar',
     enum: NotificationStatusEnum,
     default: NotificationStatusEnum.PENDING,
   })
   status: NotificationStatusEnum;
 
   @Column({
-    type: 'enum',
+    type: 'varchar',
     enum: NotificationChannelEnum,
   })
   channel: NotificationChannelEnum;
@@ -54,7 +54,7 @@ export class Notification {
   @CreateDateColumn({ name: 'updated_at' })
   updated_at: Date;
 
-  @Column('timestamp', { name: 'delivered_at', nullable: true })
+  @Column('datetime', { name: 'delivered_at', nullable: true })
   delivered_at: Date | null;
 
   @Column('simple-json', { nullable: true })

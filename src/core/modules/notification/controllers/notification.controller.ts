@@ -13,7 +13,7 @@ import { NotificationService } from '../services/notification.service';
 import { NotificationEventDto, ToggleNotificationPreferenceDto } from '../dtos';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import CoreController from 'src/core/http/controllers/core.controller';
+import CoreController from '../../../http/controllers/core.controller';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import {
   ApiTags,

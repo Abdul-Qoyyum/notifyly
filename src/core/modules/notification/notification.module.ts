@@ -10,7 +10,7 @@ import { TransportModule } from '../transport/transport.module';
 import { BullModule } from '@nestjs/bullmq';
 import { NotificationQueue } from './queues/notification.queue';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { NOTIFYLY_QUEUE, RABBITMQ_URL } from 'src/core/constants';
+import { NOTIFYLY_QUEUE, RABBITMQ_URL } from '../../../core/constants';
 
 @Module({
   imports: [

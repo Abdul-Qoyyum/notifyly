@@ -45,11 +45,11 @@ async function bootstrap() {
 
   await CommandFactory.run(AppModule);
   await app.startAllMicroservices();
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 8081);
 }
 bootstrap()
   .then(() => {
-    console.log(`Application is running on: ${process.env.PORT ?? 8081}`);
+    console.info(`Application is running on: ${process.env.PORT ?? 8081}`);
   })
   .catch((err) => {
     console.error('Error starting application:', err);
