@@ -9,6 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bullmq';
 import { SharedModule } from '../../src/core/modules/shared/shared.module';
 import { CommandModule } from '../../src/core/commands/command.module';
+import { NOTIFYLY_QUEUE } from '../../src/core/constants';
 
 export class TestUtils {
   static async getTestApp(modules: any[] = []): Promise<INestApplication> {
@@ -34,7 +35,12 @@ export class TestUtils {
 
     const moduleFixture = await Test.createTestingModule({
       imports: defaultModules,
-    }).compile();
+    })
+      .overrideProvider(NOTIFYLY_QUEUE)
+      .useValue({
+        emit: jest.fn().mockResolvedValue({}),
+      })
+      .compile();
 
     const app = moduleFixture.createNestApplication();
     await app.init();

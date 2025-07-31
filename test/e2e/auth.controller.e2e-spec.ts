@@ -17,7 +17,7 @@ describe('AuthController (e2e)', () => {
   });
 
   describe('POST /auth/login', () => {
-    it('should return all users', async () => {
+    it('should grant user authorization', async () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login')
         .send({ email: 'mateo@example.com', password: 'password' })
