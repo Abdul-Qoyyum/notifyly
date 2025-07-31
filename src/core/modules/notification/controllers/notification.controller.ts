@@ -5,11 +5,12 @@ import {
   Logger,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { NotificationService } from '../services/notification.service';
-import { NotificationEventDto } from '../dtos';
+import { NotificationEventDto, ToggleNotificationPreferenceDto } from '../dtos';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import CoreController from 'src/core/http/controllers/core.controller';
@@ -45,6 +46,10 @@ export class NotificationController extends CoreController {
     super();
   }
 
+  @ApiOperation({
+    summary: 'Get `in_app` notifications for the account',
+    description: 'Allows the user to get `in_app` notifications',
+  })
   @Get('in-app')
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
@@ -66,6 +71,11 @@ export class NotificationController extends CoreController {
     }
   }
 
+  @ApiOperation({
+    summary: 'Get all notifications for the admin',
+    description:
+      'Allows the admin to get all notifications, the admin can also filter by the `status` and the `channel`.',
+  })
   @Get('admin')
   @UseGuards(RolesGuard)
   @Roles(RoleEnum.ADMIN)
@@ -120,6 +130,13 @@ export class NotificationController extends CoreController {
     }
   }
 
+  @ApiOperation({
+    summary: 'Allows the admin to retry `pending` or `failed` notification',
+    description:
+      'Allows the admin to retry the pending or failed notification based on the notification id \
+      <br/> Notification could remain at the `pending` stage if the user disable his/her notification channel for that notification\
+      <br/> Use the `notificationId` from the `GET /api/notifications/admin` API',
+  })
   @Post('retry/:notificationId')
   @UseGuards(RolesGuard)
   @Roles(RoleEnum.ADMIN)
@@ -139,7 +156,9 @@ export class NotificationController extends CoreController {
   @ApiOperation({
     summary: 'Get user notification preferences settings',
     description:
-      'Get the notification preferences settings for the authenticated user, the `is_enabled` field indicates the active channels by which the user would be able to retrieve notifications',
+      "Get the notification preferences settings for the authenticated user, the `is_enabled` field indicates the active channels by which the user would be able to retrieve notifications,\
+      <br/> if `is_enabled` value is true, the user would be able to receive notifications on that channel, \
+      <br/> if `is_enabled` value is false, users won't be able to receive notifications on  that channel",
   })
   @Get('user-notification-preferences')
   async getUserNotificationPreferences(@Auth() user: Partial<User>) {
@@ -152,6 +171,41 @@ export class NotificationController extends CoreController {
       );
     } catch (error) {
       return this.exceptionResponse(error);
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Toggles the user notification preference settings',
+    description:
+      'Use the `id` returned from the `GET /api/notifications/user-notification-preferences` as `:notificationPreferenceId` for the authenticaded user',
+  })
+  @Put('toggleNotificationPreference/:notificationPreferenceId')
+  async toggleNotificationPreference(
+    @Param('notificationPreferenceId') notificationPreferenceId: string,
+    @Payload() toggleNotificationPreferenceDto: ToggleNotificationPreferenceDto,
+    @Auth() user: Partial<User>,
+  ) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.startTransaction();
+    try {
+      const response =
+        await this.notificationService.toggleNotificationPreference(
+          notificationPreferenceId,
+          toggleNotificationPreferenceDto,
+          user,
+          queryRunner.manager,
+        );
+      await queryRunner.commitTransaction();
+      this.logger.log('Notification prefence settings successfully updated');
+      return this.successResponse(
+        'Notification prefence settings successfully updated',
+        response,
+      );
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      this.logger.error(error?.message);
+    } finally {
+      await queryRunner.release();
     }
   }
 

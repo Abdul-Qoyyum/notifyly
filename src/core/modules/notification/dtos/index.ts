@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsOptional,
   IsObject,
+  IsBoolean,
 } from 'class-validator';
 import { NotificationChannelEnum } from '../enums';
 
@@ -47,6 +48,12 @@ export class NotificationEventDto {
   @IsString()
   @IsOptional()
   user_id?: string;
+}
+
+export class ToggleNotificationPreferenceDto {
+  @ApiProperty({ example: false })
+  @IsBoolean()
+  is_enabled: boolean;
 }
 
 export class PaginationResponseDto<T> {

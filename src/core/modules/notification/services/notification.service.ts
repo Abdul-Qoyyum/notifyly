@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { NotificationRepository } from '../repositories/notification.repository';
-import { NotificationEventDto } from '../dtos';
+import { NotificationEventDto, ToggleNotificationPreferenceDto } from '../dtos';
 import { EntityManager } from 'typeorm';
 import { NotificationChannelEnum, NotificationStatusEnum } from '../enums';
 import { Notification } from '../entities/notification.entity';
@@ -98,6 +98,28 @@ export class NotificationService {
     return true;
   }
 
+  async toggleNotificationPreference(
+    notificationPreferenceId: string,
+    toggleNotificationPreferenceDto: ToggleNotificationPreferenceDto,
+    user: Partial<User>,
+    manager: EntityManager,
+  ) {
+    const { is_enabled } = toggleNotificationPreferenceDto;
+    const notificationPreference =
+      await this.notificationRepository.getNotificationPreference({
+        id: notificationPreferenceId,
+        user_id: user.id,
+      });
+
+    if (!notificationPreference) {
+      throw new BadRequestException('Invalid user notification preference');
+    }
+
+    notificationPreference.is_enabled = is_enabled;
+    await manager.save(notificationPreference);
+    return notificationPreference;
+  }
+
   async retryNotification(notificationId: string) {
     const notification = await this.notificationRepository.getNotification({
       id: notificationId,
@@ -106,9 +128,13 @@ export class NotificationService {
       throw new NotFoundException('Notification not found');
     }
 
-    if (notification.status !== NotificationStatusEnum.FAILED) {
+    if (
+      ![NotificationStatusEnum.FAILED, NotificationStatusEnum.PENDING].includes(
+        notification.status,
+      )
+    ) {
       throw new BadRequestException(
-        'Only failed notification could be retried',
+        'Only failed or pending notifications could be retried',
       );
     }
     await this.queueNotification(notification);

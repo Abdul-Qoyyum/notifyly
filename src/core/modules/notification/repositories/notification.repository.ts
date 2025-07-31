@@ -29,6 +29,16 @@ export class NotificationRepository {
     return this.notificationPreferenceRepository.find({ where: query });
   }
 
+  async updateNotificationPeference(
+    id: string,
+    data: Partial<NotificationPreference>,
+    manager: EntityManager,
+  ) {
+    return manager
+      ? manager.update(NotificationPreference, id, data)
+      : await this.notificationPreferenceRepository.update(id, data);
+  }
+
   async saveNotification(data: Partial<Notification>, manager: EntityManager) {
     const entity = this.notificationRepository.create(data);
     return await manager.save(entity);
