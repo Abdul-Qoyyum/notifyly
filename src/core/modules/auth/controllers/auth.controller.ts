@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { LoginDto } from '../dtos';
 import { AuthService } from '../services/auth.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import CoreController from '../../../http/controllers/core.controller';
 import { IsPublic } from '../decorators';
 
@@ -13,6 +13,10 @@ export class AuthController extends CoreController {
     super();
   }
 
+  @ApiOperation({
+    summary:
+      'Kindly use the jwt `access_token` token returned to authorize your requests',
+  })
   @IsPublic()
   @Post('login')
   async login(@Body() payload: LoginDto) {
