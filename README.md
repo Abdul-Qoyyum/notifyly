@@ -65,10 +65,6 @@ Follow the steps below to set up the application locally:
 9. **Accessing the Docker MySQL Database**  
    Using the `DB_USERNAME` and `DB_PASSWORD` credentials, you can connect to the database via a MySQL client on port `3307`.
 
-
-## 🧪 Running Tests
-1. Docker is set up to automatically run the test suite prior to starting the application.
-
 ## 📂 Project Structure
 ```angular2html
     notifyly/
