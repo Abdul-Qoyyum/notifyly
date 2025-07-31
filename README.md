@@ -62,6 +62,8 @@ Follow the steps below to set up the application locally:
    username: guest
    password: guest
    ```
+9. **Accessing the Docker MySQL Database**  
+   Using the `DB_USERNAME` and `DB_PASSWORD` credentials, you can connect to the database via a MySQL client on port `3307`.
 
 
 ## 🧪 Running Tests
