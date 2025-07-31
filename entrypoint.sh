@@ -2,11 +2,12 @@
 
 set -e
 
-#echo "⏳ Installing dependencies..."
-#npm install
-
 echo "🔧 Building ..."
 npm run build
+
+echo "📜 Running test..."
+npm run test:e2e
+
 
 echo "📜 Running migrations..."
 npm run typeorm-notifyly:run-migrations

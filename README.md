@@ -1,98 +1,88 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+## 🐾 Notifyly
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+**Notifyly** serves as a centralized notification service that manages all messaging from other systems (such as the Order Service and Billing Service).
+Each of these services emits events through a RabbitMQ broker channel. Notifyly then determines the appropriate method and channel through which users should be notified.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 📦 Getting Started
 
-## Description
+### ✅ Prerequisites
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Make sure you have the following installed:
 
-## Project setup
+- [Docker](https://www.docker.com/)
 
-```bash
-$ npm install
+### 🚀 Installation
+
+Follow the steps below to set up the application locally:
+
+1. **Clone the repository**
+   ```bash
+      git clone https://github.com/Abdul-Qoyyum/notifyly.git
+   ```
+2. **Navigate to the project directory**
+    ```bash
+       cd notifyly
+    ```
+
+3. **Duplicate the `.env.example` file and rename it to `.env`**
+    ```bash
+       cp .env.example .env
+    ```
+
+3. **Set Up Environment Variables** <br/><br/> 
+
+    Open the `.env` file and update the environment variables as needed. Since we're using Docker, it's recommended to leave the values for `DB_HOST`, `REDIS_HOST`, and `RABBITMQ_HOST` unchanged.<br/><br/>
+
+4. **Start the application using Docker**
+   ```bash
+      docker compose up -d --build
+   ```
+5. Note: Once the application is running, Docker automatically manages the initial data seeding and database setup. The application includes two default user accounts for testing purposes:  <br/><br/>
+   Admin Account
+    ```bash
+    {
+      "email": "mateo@example.com",
+      "password": "password"
+    }
+    ```
+   <br/><br/>
+   User Account
+   ```bash
+    {
+      "email": "janet@example.com",
+      "password": "password"
+    }
+   ```
+7. **Accessing the API Documentation**  
+   Open your web browser and navigate to:  [http://localhost:8081/api/docs](http://localhost:8081/api/docs) <br/><br/>
+
+8. **Accessing the RabbitMQ GUI to Monitor Processes**  
+   Open your web browser and go to:  [http://localhost:15673](http://localhost:15673) <br/>
+   ```bash
+   username: guest
+   password: guest
+   ```
+
+
+## 🧪 Running Tests
+1. Docker is set up to automatically run the test suite prior to starting the application.
+
+## 📂 Project Structure
+```angular2html
+    notifyly/
+    ├── src/                # Symfony source files
+    ├── tests/              # PHPUnit test files
+    ├── .env.example        # Environment configuration
+    └── ...
 ```
 
-## Compile and run the project
+## 🛠️ Technologies Used
+- Node.Js
+- Redis
+- Docker
+- RabbitMQ
+- MySQL
 
-```bash
-# development
-$ npm run start
+## 🙋‍♂️ Contributing
+Contributions are welcome! Please fork the repository and submit a pull request.
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
